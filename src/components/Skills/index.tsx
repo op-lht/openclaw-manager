@@ -123,15 +123,15 @@ function CustomInstallDialog({ onClose, onInstalled }: CustomInstallDialogProps)
                 initial={{ scale: 0.95, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.95, opacity: 0 }}
-                className="bg-dark-800 rounded-2xl border border-dark-600 w-full max-w-lg overflow-hidden"
+                className="bg-surface-sidebar rounded-2xl border border-edge w-full max-w-lg overflow-hidden"
                 onClick={e => e.stopPropagation()}
             >
-                <div className="px-6 py-4 border-b border-dark-600 flex items-center justify-between">
-                    <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+                <div className="px-6 py-4 border-b border-edge flex items-center justify-between">
+                    <h2 className="text-lg font-semibold text-content-primary flex items-center gap-2">
                         <Plus size={20} className="text-claw-400" />
                         安装自定义技能
                     </h2>
-                    <button onClick={onClose} className="text-gray-500 hover:text-white">✕</button>
+                    <button onClick={onClose} className="text-content-tertiary hover:text-content-primary">✕</button>
                 </div>
 
                 <div className="p-6 space-y-5">
@@ -142,8 +142,8 @@ function CustomInstallDialog({ onClose, onInstalled }: CustomInstallDialogProps)
                             className={clsx(
                                 'flex-1 flex items-center justify-center gap-2 p-3 rounded-xl border transition-all',
                                 sourceType === 'npm'
-                                    ? 'bg-claw-500/20 border-claw-500 text-white'
-                                    : 'bg-dark-700 border-dark-500 text-gray-400 hover:border-dark-400'
+                                    ? 'bg-claw-500/20 border-claw-500 text-content-primary'
+                                    : 'bg-surface-card border-edge text-content-secondary hover:border-edge'
                             )}
                         >
                             <Package size={18} />
@@ -154,8 +154,8 @@ function CustomInstallDialog({ onClose, onInstalled }: CustomInstallDialogProps)
                             className={clsx(
                                 'flex-1 flex items-center justify-center gap-2 p-3 rounded-xl border transition-all',
                                 sourceType === 'local'
-                                    ? 'bg-claw-500/20 border-claw-500 text-white'
-                                    : 'bg-dark-700 border-dark-500 text-gray-400 hover:border-dark-400'
+                                    ? 'bg-claw-500/20 border-claw-500 text-content-primary'
+                                    : 'bg-surface-card border-edge text-content-secondary hover:border-edge'
                             )}
                         >
                             <FolderOpen size={18} />
@@ -165,7 +165,7 @@ function CustomInstallDialog({ onClose, onInstalled }: CustomInstallDialogProps)
 
                     {/* 输入框 */}
                     <div>
-                        <label className="block text-sm text-gray-400 mb-2">
+                        <label className="block text-sm text-content-secondary mb-2">
                             {sourceType === 'npm' ? 'npm 包名' : '本地路径 (zip 或文件夹)'}
                         </label>
                         <div className="flex gap-2">
@@ -187,7 +187,7 @@ function CustomInstallDialog({ onClose, onInstalled }: CustomInstallDialogProps)
                                 </button>
                             )}
                         </div>
-                        <p className="text-xs text-gray-500 mt-1.5">
+                        <p className="text-xs text-content-tertiary mt-1.5">
                             {sourceType === 'npm'
                                 ? '输入 npm 包名，例如: @openclaw/voice-call, my-custom-skill'
                                 : '输入 zip 文件或文件夹的完整路径'}
@@ -209,7 +209,7 @@ function CustomInstallDialog({ onClose, onInstalled }: CustomInstallDialogProps)
                     )}
                 </div>
 
-                <div className="px-6 py-4 border-t border-dark-600 flex justify-end gap-3">
+                <div className="px-6 py-4 border-t border-edge flex justify-end gap-3">
                     <button onClick={onClose} className="btn-secondary">取消</button>
                     <button
                         onClick={handleInstall}
@@ -411,7 +411,7 @@ export function Skills() {
                 <div className="flex items-center gap-3 mb-4">
                     {/* 搜索框 */}
                     <div className="relative flex-1 max-w-xs">
-                        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-content-tertiary" />
                         <input
                             type="text"
                             value={searchQuery}
@@ -422,7 +422,7 @@ export function Skills() {
                     </div>
 
                     {/* 分类 Tab */}
-                    <div className="flex gap-1 bg-dark-700 rounded-lg p-1">
+                    <div className="flex gap-1 bg-surface-card rounded-lg p-1">
                         {filterTabs.map(tab => (
                             <button
                                 key={tab.id}
@@ -431,11 +431,11 @@ export function Skills() {
                                     'px-3 py-1.5 rounded-md text-xs font-medium transition-all',
                                     sourceFilter === tab.id
                                         ? 'bg-claw-500/30 text-claw-300'
-                                        : 'text-gray-400 hover:text-white'
+                                        : 'text-content-secondary hover:text-content-primary'
                                 )}
                             >
                                 {tab.label}
-                                <span className="ml-1 text-gray-500">{tab.count}</span>
+                                <span className="ml-1 text-content-tertiary">{tab.count}</span>
                             </button>
                         ))}
                     </div>
@@ -454,7 +454,7 @@ export function Skills() {
                     {/* 左栏：技能列表 */}
                     <div className="lg:col-span-1 space-y-2">
                         {filteredSkills.length === 0 ? (
-                            <div className="text-center py-8 text-gray-500">
+                            <div className="text-center py-8 text-content-tertiary">
                                 <Filter size={32} className="mx-auto mb-2 opacity-50" />
                                 <p className="text-sm">没有找到匹配的技能</p>
                             </div>
@@ -470,13 +470,13 @@ export function Skills() {
                                         className={clsx(
                                             'w-full flex items-center gap-3 p-4 rounded-xl border transition-all text-left',
                                             isSelected
-                                                ? 'bg-dark-600 border-claw-500'
-                                                : 'bg-dark-700 border-dark-500 hover:border-dark-400'
+                                                ? 'bg-surface-elevated border-claw-500'
+                                                : 'bg-surface-card border-edge hover:border-edge'
                                         )}
                                     >
                                         <div className={clsx(
                                             'w-10 h-10 rounded-lg flex items-center justify-center text-lg',
-                                            skill.installed ? 'bg-dark-500' : 'bg-dark-600'
+                                            skill.installed ? 'bg-surface-elevated' : 'bg-surface-elevated'
                                         )}>
                                             {skill.icon}
                                         </div>
@@ -484,7 +484,7 @@ export function Skills() {
                                             <div className="flex items-center gap-2">
                                                 <p className={clsx(
                                                     'text-sm font-medium truncate',
-                                                    isSelected ? 'text-white' : 'text-gray-300'
+                                                    isSelected ? 'text-content-primary' : 'text-content-secondary'
                                                 )}>
                                                     {skill.name}
                                                 </p>
@@ -498,7 +498,7 @@ export function Skills() {
                                                         <Check size={10} /> 已启用
                                                     </span>
                                                 ) : skill.installed ? (
-                                                    <span className="flex items-center gap-1 text-xs text-gray-500">
+                                                    <span className="flex items-center gap-1 text-xs text-content-tertiary">
                                                         <Check size={10} /> 已安装
                                                     </span>
                                                 ) : (
@@ -525,16 +525,16 @@ export function Skills() {
                                 key={selectedSkill}
                                 initial={{ opacity: 0, x: 20 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                className="bg-dark-700 rounded-2xl p-6 border border-dark-500"
+                                className="bg-surface-card rounded-2xl p-6 border border-edge"
                             >
                                 {/* 头部 */}
                                 <div className="flex items-start gap-4 mb-5">
-                                    <div className="w-14 h-14 rounded-xl bg-dark-500 flex items-center justify-center text-2xl">
+                                    <div className="w-14 h-14 rounded-xl bg-surface-elevated flex items-center justify-center text-2xl">
                                         {currentSkill.icon}
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2 flex-wrap">
-                                            <h3 className="text-lg font-semibold text-white">{currentSkill.name}</h3>
+                                            <h3 className="text-lg font-semibold text-content-primary">{currentSkill.name}</h3>
                                             {(() => {
                                                 const srcInfo = sourceLabels[currentSkill.source] || sourceLabels.custom;
                                                 return (
@@ -544,14 +544,14 @@ export function Skills() {
                                                 );
                                             })()}
                                             {currentSkill.category && (
-                                                <span className="text-xs px-2 py-0.5 rounded bg-dark-500 text-gray-400">
+                                                <span className="text-xs px-2 py-0.5 rounded bg-surface-elevated text-content-secondary">
                                                     {currentSkill.category}
                                                 </span>
                                             )}
                                         </div>
-                                        <p className="text-sm text-gray-400 mt-1">{currentSkill.description}</p>
+                                        <p className="text-sm text-content-secondary mt-1">{currentSkill.description}</p>
                                         {currentSkill.author && (
-                                            <p className="text-xs text-gray-500 mt-1">作者: {currentSkill.author}</p>
+                                            <p className="text-xs text-content-tertiary mt-1">作者: {currentSkill.author}</p>
                                         )}
                                         {currentSkill.docs_url && (
                                             <a
@@ -568,7 +568,7 @@ export function Skills() {
                                 </div>
 
                                 {/* 操作按钮区 */}
-                                <div className="flex flex-wrap items-center gap-3 mb-5 pb-5 border-b border-dark-500">
+                                <div className="flex flex-wrap items-center gap-3 mb-5 pb-5 border-b border-edge">
                                     {/* 安装/卸载 */}
                                     {currentSkill.source !== 'builtin' && (
                                         <>
@@ -610,7 +610,7 @@ export function Skills() {
                                                 'flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition-all',
                                                 currentSkill.enabled
                                                     ? 'bg-green-500/20 border-green-500/50 text-green-400 hover:bg-green-500/30'
-                                                    : 'bg-dark-600 border-dark-500 text-gray-400 hover:text-white hover:border-dark-400'
+                                                    : 'bg-surface-elevated border-edge text-content-secondary hover:text-content-primary hover:border-edge'
                                             )}
                                         >
                                             {currentSkill.enabled ? <Power size={16} /> : <PowerOff size={16} />}
@@ -620,12 +620,12 @@ export function Skills() {
 
                                     {/* 包名信息 */}
                                     {currentSkill.package_name && (
-                                        <span className="text-xs text-gray-500 ml-auto">
+                                        <span className="text-xs text-content-tertiary ml-auto">
                                             📦 {currentSkill.package_name}
                                         </span>
                                     )}
                                     {currentSkill.clawhub_slug && (
-                                        <span className="text-xs text-gray-500 ml-auto">
+                                        <span className="text-xs text-content-tertiary ml-auto">
                                             🔗 clawhub/{currentSkill.clawhub_slug}
                                         </span>
                                     )}
@@ -634,14 +634,14 @@ export function Skills() {
                                 {/* 配置表单 */}
                                 {currentSkill.config_fields.length > 0 && (
                                     <div className="space-y-4">
-                                        <h4 className="text-sm font-medium text-gray-300 flex items-center gap-2">
+                                        <h4 className="text-sm font-medium text-content-secondary flex items-center gap-2">
                                             <Puzzle size={16} className="text-claw-400" />
                                             技能配置
                                         </h4>
 
                                         {currentSkill.config_fields.map(field => (
                                             <div key={field.key}>
-                                                <label className="block text-sm text-gray-400 mb-2">
+                                                <label className="block text-sm text-content-secondary mb-2">
                                                     {field.label}
                                                     {field.required && <span className="text-red-400 ml-1">*</span>}
                                                     {configForm[field.key] && (
@@ -672,7 +672,7 @@ export function Skills() {
                                                         <button
                                                             type="button"
                                                             onClick={() => togglePasswordVisibility(field.key)}
-                                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
+                                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-content-tertiary hover:text-content-primary transition-colors"
                                                         >
                                                             {visiblePasswords.has(field.key) ? <EyeOff size={18} /> : <Eye size={18} />}
                                                         </button>
@@ -685,7 +685,7 @@ export function Skills() {
                                                         })}
                                                         className={clsx(
                                                             'w-12 h-6 rounded-full relative transition-colors',
-                                                            configForm[field.key] === 'true' ? 'bg-claw-500' : 'bg-dark-500'
+                                                            configForm[field.key] === 'true' ? 'bg-claw-500' : 'bg-surface-elevated'
                                                         )}
                                                     >
                                                         <span className={clsx(
@@ -704,13 +704,13 @@ export function Skills() {
                                                 )}
 
                                                 {field.help_text && (
-                                                    <p className="text-xs text-gray-500 mt-1">{field.help_text}</p>
+                                                    <p className="text-xs text-content-tertiary mt-1">{field.help_text}</p>
                                                 )}
                                             </div>
                                         ))}
 
                                         {/* 保存按钮 */}
-                                        <div className="pt-4 border-t border-dark-500">
+                                        <div className="pt-4 border-t border-edge">
                                             <button
                                                 onClick={handleSaveConfig}
                                                 disabled={saving}
@@ -726,7 +726,7 @@ export function Skills() {
                                 {/* 无配置项提示 */}
                                 {currentSkill.config_fields.length === 0 && (
                                     <div className="text-center py-6">
-                                        <p className="text-sm text-gray-500">该技能无需额外配置</p>
+                                        <p className="text-sm text-content-tertiary">该技能无需额外配置</p>
                                     </div>
                                 )}
 
@@ -751,9 +751,9 @@ export function Skills() {
                                 </AnimatePresence>
                             </motion.div>
                         ) : (
-                            <div className="bg-dark-700 rounded-2xl p-6 border border-dark-500 flex flex-col items-center justify-center h-64">
+                            <div className="bg-surface-card rounded-2xl p-6 border border-edge flex flex-col items-center justify-center h-64">
                                 <Puzzle size={48} className="text-gray-600 mb-4" />
-                                <p className="text-gray-500 text-sm">选择一个技能查看详情与配置</p>
+                                <p className="text-content-tertiary text-sm">选择一个技能查看详情与配置</p>
                             </div>
                         )}
                     </div>

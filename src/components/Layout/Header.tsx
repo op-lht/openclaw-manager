@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { PageType } from '../../App';
-import { RefreshCw, ExternalLink, Loader2 } from 'lucide-react';
+import { RefreshCw, ExternalLink, Loader2, Sun, Moon } from 'lucide-react';
 import { open } from '@tauri-apps/plugin-shell';
 import { invoke } from '@tauri-apps/api/core';
+import { useTheme } from '../../lib/ThemeContext';
 
 interface HeaderProps {
   currentPage: PageType;
@@ -23,16 +24,15 @@ const pageTitles: Record<PageType, { title: string; description: string }> = {
 export function Header({ currentPage }: HeaderProps) {
   const { title, description } = pageTitles[currentPage];
   const [opening, setOpening] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   const handleOpenDashboard = async () => {
     setOpening(true);
     try {
-      // 获取带 token 的 Dashboard URL（如果没有 token 会自动生成）
       const url = await invoke<string>('get_dashboard_url');
       await open(url);
     } catch (e) {
       console.error('打开 Dashboard 失败:', e);
-      // 降级方案：使用 window.open（不带 token）
       window.open('http://localhost:18789', '_blank');
     } finally {
       setOpening(false);
@@ -40,18 +40,34 @@ export function Header({ currentPage }: HeaderProps) {
   };
 
   return (
-    <header className="h-14 bg-dark-800/50 border-b border-dark-600 flex items-center justify-between px-6 titlebar-drag backdrop-blur-sm">
+    <header
+      className="h-14 flex items-center justify-between px-6 titlebar-drag backdrop-blur-sm"
+      style={{
+        backgroundColor: 'var(--bg-overlay)',
+        borderBottom: '1px solid var(--border-primary)',
+      }}
+    >
       {/* 左侧：页面标题 */}
       <div className="titlebar-no-drag">
-        <h2 className="text-lg font-semibold text-white">{title}</h2>
-        <p className="text-xs text-gray-500">{description}</p>
+        <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>{title}</h2>
+        <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>{description}</p>
       </div>
 
       {/* 右侧：操作按钮 */}
       <div className="flex items-center gap-2 titlebar-no-drag">
+        {/* 主题切换 */}
+        <button
+          onClick={toggleTheme}
+          className="icon-button"
+          style={{ color: 'var(--text-secondary)' }}
+          title={theme === 'light' ? '切换到暗色模式' : '切换到亮色模式'}
+        >
+          {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
+        </button>
         <button
           onClick={() => window.location.reload()}
-          className="icon-button text-gray-400 hover:text-white"
+          className="icon-button"
+          style={{ color: 'var(--text-secondary)' }}
           title="刷新"
         >
           <RefreshCw size={16} />
@@ -59,7 +75,11 @@ export function Header({ currentPage }: HeaderProps) {
         <button
           onClick={handleOpenDashboard}
           disabled={opening}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-dark-600 hover:bg-dark-500 text-sm text-gray-300 hover:text-white transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-colors disabled:opacity-50"
+          style={{
+            backgroundColor: 'var(--bg-elevated)',
+            color: 'var(--text-secondary)',
+          }}
           title="打开 Web Dashboard"
         >
           {opening ? <Loader2 size={14} className="animate-spin" /> : <ExternalLink size={14} />}

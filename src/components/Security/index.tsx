@@ -210,10 +210,10 @@ export function Security() {
                                 <ShieldAlert size={24} className="text-red-400" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-bold text-white mb-1">
+                                <h3 className="text-lg font-bold text-content-primary mb-1">
                                     ⚠️ 安全风险提醒
                                 </h3>
-                                <p className="text-sm text-gray-300 leading-relaxed">
+                                <p className="text-sm text-content-secondary leading-relaxed">
                                     OpenClaw 拥有<span className="text-red-400 font-medium">读写文件、发送消息、执行代码</span>等强大权限。
                                     AI 的自主决策可能导致以下风险：
                                 </p>
@@ -221,36 +221,36 @@ export function Security() {
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
-                            <div className="flex items-center gap-2 p-3 bg-dark-800/60 rounded-lg border border-dark-500/50">
+                            <div className="flex items-center gap-2 p-3 bg-surface-overlay rounded-lg border border-edge-secondary">
                                 <FileWarning size={16} className="text-red-400 flex-shrink-0" />
-                                <span className="text-xs text-gray-300">重要文件被误删或覆盖</span>
+                                <span className="text-xs text-content-secondary">重要文件被误删或覆盖</span>
                             </div>
-                            <div className="flex items-center gap-2 p-3 bg-dark-800/60 rounded-lg border border-dark-500/50">
+                            <div className="flex items-center gap-2 p-3 bg-surface-overlay rounded-lg border border-edge-secondary">
                                 <AlertTriangle size={16} className="text-amber-400 flex-shrink-0" />
-                                <span className="text-xs text-gray-300">邮件/消息被误发送</span>
+                                <span className="text-xs text-content-secondary">邮件/消息被误发送</span>
                             </div>
-                            <div className="flex items-center gap-2 p-3 bg-dark-800/60 rounded-lg border border-dark-500/50">
+                            <div className="flex items-center gap-2 p-3 bg-surface-overlay rounded-lg border border-edge-secondary">
                                 <Globe size={16} className="text-blue-400 flex-shrink-0" />
-                                <span className="text-xs text-gray-300">敏感数据泄露到外部</span>
+                                <span className="text-xs text-content-secondary">敏感数据泄露到外部</span>
                             </div>
                         </div>
 
-                        <p className="text-xs text-gray-500 mt-4 leading-relaxed">
+                        <p className="text-xs text-content-tertiary mt-4 leading-relaxed">
                             建议定期执行安全检测，确保系统配置安全。如果 OpenClaw 部署在公网环境，请务必配置身份验证和访问控制。
                         </p>
                     </div>
                 </motion.div>
 
                 {/* 安全检测区域 */}
-                <div className="bg-dark-700 rounded-2xl p-6 border border-dark-500">
+                <div className="bg-surface-card rounded-2xl p-6 border border-edge">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-xl bg-claw-500/20 flex items-center justify-center">
                                 <Search size={20} className="text-claw-400" />
                             </div>
                             <div>
-                                <h3 className="text-lg font-semibold text-white">安全检测</h3>
-                                <p className="text-xs text-gray-500">
+                                <h3 className="text-lg font-semibold text-content-primary">安全检测</h3>
+                                <p className="text-xs text-content-tertiary">
                                     扫描系统配置、网络暴露、技能库等安全风险
                                 </p>
                             </div>
@@ -278,12 +278,12 @@ export function Security() {
                                 exit={{ opacity: 0, height: 0 }}
                                 className="overflow-hidden"
                             >
-                                <div className="p-4 bg-dark-600 rounded-xl border border-dark-500 mb-4">
+                                <div className="p-4 bg-surface-elevated rounded-xl border border-edge mb-4">
                                     <div className="flex items-center gap-3 mb-3">
                                         <Loader2 size={18} className="animate-spin text-claw-400" />
-                                        <span className="text-sm text-gray-300">正在扫描安全风险...</span>
+                                        <span className="text-sm text-content-secondary">正在扫描安全风险...</span>
                                     </div>
-                                    <div className="w-full bg-dark-500 rounded-full h-1.5 overflow-hidden">
+                                    <div className="w-full bg-surface-elevated rounded-full h-1.5 overflow-hidden">
                                         <motion.div
                                             className="h-full bg-gradient-to-r from-claw-500 to-purple-500 rounded-full"
                                             initial={{ width: '0%' }}
@@ -291,7 +291,7 @@ export function Security() {
                                             transition={{ duration: 3, ease: 'easeInOut' }}
                                         />
                                     </div>
-                                    <div className="flex justify-between mt-2 text-xs text-gray-500">
+                                    <div className="flex justify-between mt-2 text-xs text-content-tertiary">
                                         <span>检测 IP 地址...</span>
                                         <span>检测端口暴露...</span>
                                         <span>扫描技能库...</span>
@@ -312,16 +312,16 @@ export function Security() {
                                 <div className="p-6 bg-green-500/10 rounded-xl border border-green-500/30 text-center">
                                     <ShieldCheck size={40} className="text-green-400 mx-auto mb-3" />
                                     <p className="text-green-400 font-medium">安全检测通过</p>
-                                    <p className="text-xs text-gray-400 mt-1">未发现安全风险，系统配置良好</p>
+                                    <p className="text-xs text-content-secondary mt-1">未发现安全风险，系统配置良好</p>
                                 </div>
                             ) : (
                                 <>
                                     {/* 统计概览 */}
-                                    <div className="flex items-center gap-4 p-4 bg-dark-600 rounded-xl border border-dark-500">
+                                    <div className="flex items-center gap-4 p-4 bg-surface-elevated rounded-xl border border-edge">
                                         <div className="flex items-center gap-2">
-                                            <ShieldAlert size={18} className="text-gray-400" />
-                                            <span className="text-sm text-gray-300">
-                                                发现 <span className="text-white font-medium">{issues.length}</span> 个风险项
+                                            <ShieldAlert size={18} className="text-content-secondary" />
+                                            <span className="text-sm text-content-secondary">
+                                                发现 <span className="text-content-primary font-medium">{issues.length}</span> 个风险项
                                             </span>
                                         </div>
                                         <div className="flex gap-3 ml-auto text-xs">
@@ -366,7 +366,7 @@ export function Security() {
                                     {/* 其他风险组 */}
                                     {otherIssues.length > 0 && (
                                         <div>
-                                            <h4 className="text-sm font-medium text-gray-400 mb-2 flex items-center gap-2">
+                                            <h4 className="text-sm font-medium text-content-secondary mb-2 flex items-center gap-2">
                                                 <Info size={14} />
                                                 其他风险项
                                             </h4>
@@ -384,7 +384,7 @@ export function Security() {
                                     )}
 
                                     {/* 一键修复按钮区域 */}
-                                    <div className="pt-4 border-t border-dark-500">
+                                    <div className="pt-4 border-t border-edge">
                                         <div className="flex items-center gap-3">
                                             <button
                                                 onClick={handleFix}
@@ -441,7 +441,7 @@ export function Security() {
                                                             {fixResult.message}
                                                         </p>
                                                         {fixResult.fixed_ids.length > 0 && (
-                                                            <p className="text-xs text-gray-400 mt-1">
+                                                            <p className="text-xs text-content-secondary mt-1">
                                                                 已修复 {fixResult.fixed_ids.length} 项
                                                             </p>
                                                         )}
@@ -458,12 +458,12 @@ export function Security() {
 
                                     {/* 不可修复项的手动防护说明 */}
                                     {(unfixableIssues.length > 0 || manualInstructions) && (
-                                        <div className="bg-dark-600 rounded-xl p-5 border border-dark-500">
+                                        <div className="bg-surface-elevated rounded-xl p-5 border border-edge">
                                             <div className="flex items-center gap-2 mb-3">
                                                 <Info size={16} className="text-blue-400" />
-                                                <h4 className="text-sm font-medium text-white">手动防护建议</h4>
+                                                <h4 className="text-sm font-medium text-content-primary">手动防护建议</h4>
                                             </div>
-                                            <div className="text-xs text-gray-400 leading-relaxed space-y-2 whitespace-pre-wrap font-mono bg-dark-700 rounded-lg p-4 border border-dark-500">
+                                            <div className="text-xs text-content-secondary leading-relaxed space-y-2 whitespace-pre-wrap font-mono bg-surface-card rounded-lg p-4 border border-edge">
                                                 {manualInstructions ||
                                                     `以下风险项需要手动处理：
 
@@ -530,14 +530,14 @@ function SecurityIssueItem({
                         issue.fixed
                             ? 'bg-green-500 border-green-500'
                             : isDisabled
-                                ? 'bg-dark-600 border-dark-400 cursor-not-allowed opacity-50'
+                                ? 'bg-surface-elevated border-edge cursor-not-allowed opacity-50'
                                 : selected
                                     ? 'bg-claw-500 border-claw-500'
-                                    : 'border-dark-400 hover:border-claw-400'
+                                    : 'border-edge hover:border-claw-400'
                     )}
                 >
                     {(issue.fixed || selected) && (
-                        <CheckCircle size={12} className="text-white" />
+                        <CheckCircle size={12} className="text-content-primary" />
                     )}
                 </div>
             </div>
@@ -546,7 +546,7 @@ function SecurityIssueItem({
             <div
                 className={clsx(
                     'w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0',
-                    issue.fixed ? 'bg-green-500/10' : 'bg-dark-600'
+                    issue.fixed ? 'bg-green-500/10' : 'bg-surface-elevated'
                 )}
             >
                 <CategoryIcon
@@ -561,7 +561,7 @@ function SecurityIssueItem({
                     <span
                         className={clsx(
                             'text-sm font-medium',
-                            issue.fixed ? 'text-green-400 line-through' : 'text-white'
+                            issue.fixed ? 'text-green-400 line-through' : 'text-content-primary'
                         )}
                     >
                         {issue.title}
@@ -575,12 +575,12 @@ function SecurityIssueItem({
                         {issue.fixed ? '已修复' : config.label}
                     </span>
                     {!issue.fixable && !issue.fixed && (
-                        <span className="text-xs px-1.5 py-0.5 rounded bg-dark-500 text-gray-500">
+                        <span className="text-xs px-1.5 py-0.5 rounded bg-surface-elevated text-content-tertiary">
                             需手动处理
                         </span>
                     )}
                 </div>
-                <p className="text-xs text-gray-400 leading-relaxed">{issue.description}</p>
+                <p className="text-xs text-content-secondary leading-relaxed">{issue.description}</p>
             </div>
         </motion.div>
     );

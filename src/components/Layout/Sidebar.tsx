@@ -40,16 +40,21 @@ const menuItems: { id: PageType; label: string; icon: React.ElementType }[] = [
 export function Sidebar({ currentPage, onNavigate, serviceStatus }: SidebarProps) {
   const isRunning = serviceStatus?.running ?? false;
   return (
-    <aside className="w-64 bg-dark-800 border-r border-dark-600 flex flex-col">
+    <aside
+      className="w-64 flex flex-col"
+      style={{ backgroundColor: 'var(--bg-sidebar)', borderRight: '1px solid var(--border-primary)' }}
+    >
       {/* Logo 区域（macOS 标题栏拖拽） */}
-      <div className="h-14 flex items-center px-6 titlebar-drag border-b border-dark-600">
+      <div
+        className="h-14 flex items-center px-6 titlebar-drag"
+        style={{ borderBottom: '1px solid var(--border-primary)' }}
+      >
         <div className="flex items-center gap-3 titlebar-no-drag">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-claw-400 to-claw-600 flex items-center justify-center">
             <span className="text-lg">🦞</span>
           </div>
           <div>
-            <h1 className="text-sm font-semibold text-white">OpenClaw</h1>
-            <p className="text-xs text-gray-500">Manager</p>
+            <h1 className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>虾池子</h1>
           </div>
         </div>
       </div>
@@ -66,11 +71,24 @@ export function Sidebar({ currentPage, onNavigate, serviceStatus }: SidebarProps
                 <button
                   onClick={() => onNavigate(item.id)}
                   className={clsx(
-                    'w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all relative',
-                    isActive
-                      ? 'text-white bg-dark-600'
-                      : 'text-gray-400 hover:text-white hover:bg-dark-700'
+                    'w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all relative'
                   )}
+                  style={{
+                    color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+                    backgroundColor: isActive ? 'var(--bg-elevated)' : 'transparent',
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.backgroundColor = 'var(--bg-card-hover)';
+                      e.currentTarget.style.color = 'var(--text-primary)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = 'var(--text-secondary)';
+                    }
+                  }}
                 >
                   {isActive && (
                     <motion.div
@@ -89,15 +107,15 @@ export function Sidebar({ currentPage, onNavigate, serviceStatus }: SidebarProps
       </nav>
 
       {/* 底部信息 */}
-      <div className="p-4 border-t border-dark-600">
-        <div className="px-4 py-3 bg-dark-700 rounded-lg">
+      <div className="p-4" style={{ borderTop: '1px solid var(--border-primary)' }}>
+        <div className="px-4 py-3 rounded-lg" style={{ backgroundColor: 'var(--bg-card)' }}>
           <div className="flex items-center gap-2 mb-2">
             <div className={clsx('status-dot', isRunning ? 'running' : 'stopped')} />
-            <span className="text-xs text-gray-400">
+            <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
               {isRunning ? '服务运行中' : '服务未启动'}
             </span>
           </div>
-          <p className="text-xs text-gray-500">端口: {serviceStatus?.port ?? 18789}</p>
+          <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>端口: {serviceStatus?.port ?? 18789}</p>
         </div>
       </div>
     </aside>

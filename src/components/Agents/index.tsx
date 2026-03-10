@@ -117,43 +117,43 @@ function NewAgentDialog({ existingIds, onClose, onCreated }: NewAgentDialogProps
         >
             <motion.div
                 initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }}
-                className="bg-dark-800 rounded-2xl border border-dark-600 w-full max-w-md overflow-hidden"
+                className="bg-surface-sidebar rounded-2xl border border-edge w-full max-w-md overflow-hidden"
                 onClick={e => e.stopPropagation()}
             >
-                <div className="px-6 py-4 border-b border-dark-600">
-                    <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+                <div className="px-6 py-4 border-b border-edge">
+                    <h2 className="text-lg font-semibold text-content-primary flex items-center gap-2">
                         <Plus size={20} className="text-claw-400" />
                         新建虚拟员工
                     </h2>
                 </div>
                 <div className="p-6 space-y-4">
                     <div>
-                        <label className="block text-sm text-gray-400 mb-1">Agent ID <span className="text-red-400">*</span></label>
+                        <label className="block text-sm text-content-secondary mb-1">Agent ID <span className="text-red-400">*</span></label>
                         <input value={id} onChange={e => { setId(e.target.value); setError(null); }}
                             placeholder="如: assistant, researcher, coder"
                             className="input-base" />
                         <p className="text-xs text-gray-600 mt-1">仅支持小写字母、数字和连字符</p>
                     </div>
                     <div>
-                        <label className="block text-sm text-gray-400 mb-1">名称 <span className="text-red-400">*</span></label>
+                        <label className="block text-sm text-content-secondary mb-1">名称 <span className="text-red-400">*</span></label>
                         <input value={name} onChange={e => { setName(e.target.value); setError(null); }}
                             placeholder="如: 研究员小李、代码审查员"
                             className="input-base" />
                     </div>
                     <div>
-                        <label className="block text-sm text-gray-400 mb-1">标识 Emoji</label>
+                        <label className="block text-sm text-content-secondary mb-1">标识 Emoji</label>
                         <div className="flex flex-wrap gap-2">
                             {emojiOptions.map(e => (
                                 <button key={e} onClick={() => setEmoji(e)}
                                     className={clsx('w-9 h-9 rounded-lg text-lg flex items-center justify-center transition-all',
-                                        emoji === e ? 'bg-claw-500/30 ring-1 ring-claw-500' : 'bg-dark-600 hover:bg-dark-500')}>
+                                        emoji === e ? 'bg-claw-500/30 ring-1 ring-claw-500' : 'bg-surface-elevated hover:bg-surface-elevated')}>
                                     {e}
                                 </button>
                             ))}
                         </div>
                     </div>
                     <div>
-                        <label className="block text-sm text-gray-400 mb-1">角色描述</label>
+                        <label className="block text-sm text-content-secondary mb-1">角色描述</label>
                         <textarea value={theme} onChange={e => setTheme(e.target.value)}
                             placeholder="描述这个虚拟员工的角色定位和职责..."
                             className="input-base resize-none h-20" />
@@ -164,7 +164,7 @@ function NewAgentDialog({ existingIds, onClose, onCreated }: NewAgentDialogProps
                         </p>
                     )}
                 </div>
-                <div className="px-6 py-4 border-t border-dark-600 flex justify-end gap-3">
+                <div className="px-6 py-4 border-t border-edge flex justify-end gap-3">
                     <button onClick={onClose} className="btn-secondary">取消</button>
                     <button onClick={handleCreate} className="btn-primary flex items-center gap-2">
                         <Plus size={16} /> 创建
@@ -305,33 +305,33 @@ export function Agents() {
                                     onClick={() => selectAgent(agent.id)}
                                     className={clsx(
                                         'w-full flex items-center gap-3 p-4 rounded-xl border transition-all text-left',
-                                        isSelected ? 'bg-dark-600 border-claw-500' : 'bg-dark-700 border-dark-500 hover:border-dark-400'
+                                        isSelected ? 'bg-surface-elevated border-claw-500' : 'bg-surface-card border-edge hover:border-edge'
                                     )}
                                 >
-                                    <div className="w-11 h-11 rounded-xl bg-dark-500 flex items-center justify-center text-xl">
+                                    <div className="w-11 h-11 rounded-xl bg-surface-elevated flex items-center justify-center text-xl">
                                         {agent.emoji}
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2">
-                                            <p className={clsx('text-sm font-medium truncate', isSelected ? 'text-white' : 'text-gray-300')}>
+                                            <p className={clsx('text-sm font-medium truncate', isSelected ? 'text-content-primary' : 'text-content-secondary')}>
                                                 {agent.name}
                                             </p>
                                             {agent.isDefault && (
                                                 <Crown size={13} className="text-yellow-500 flex-shrink-0" />
                                             )}
                                         </div>
-                                        <p className="text-xs text-gray-500 truncate mt-0.5">
+                                        <p className="text-xs text-content-tertiary truncate mt-0.5">
                                             {agent.theme || agent.id}
                                         </p>
                                         {agent.bindings.length > 0 && (
                                             <div className="flex items-center gap-1 mt-1 flex-wrap">
                                                 {agent.bindings.slice(0, 3).map(b => (
-                                                    <span key={b.channel} className="text-[10px] px-1.5 py-0.5 rounded bg-dark-500 text-gray-400">
+                                                    <span key={b.channel} className="text-[10px] px-1.5 py-0.5 rounded bg-surface-elevated text-content-secondary">
                                                         {channelOptions.find(c => c.id === b.channel)?.emoji || '📡'} {b.channel}
                                                     </span>
                                                 ))}
                                                 {agent.bindings.length > 3 && (
-                                                    <span className="text-[10px] text-gray-500">+{agent.bindings.length - 3}</span>
+                                                    <span className="text-[10px] text-content-tertiary">+{agent.bindings.length - 3}</span>
                                                 )}
                                             </div>
                                         )}
@@ -343,7 +343,7 @@ export function Agents() {
 
                         <button
                             onClick={() => setShowNewDialog(true)}
-                            className="w-full flex items-center justify-center gap-2 p-4 rounded-xl border-2 border-dashed border-dark-500 text-gray-500 hover:border-claw-500 hover:text-claw-400 transition-all"
+                            className="w-full flex items-center justify-center gap-2 p-4 rounded-xl border-2 border-dashed border-edge text-content-tertiary hover:border-claw-500 hover:text-claw-400 transition-all"
                         >
                             <Plus size={18} />
                             <span className="text-sm">新建虚拟员工</span>
@@ -360,35 +360,35 @@ export function Agents() {
                                 className="space-y-5"
                             >
                                 {/* 身份信息 */}
-                                <div className="bg-dark-700 rounded-2xl p-6 border border-dark-500">
-                                    <h4 className="text-sm font-medium text-gray-300 flex items-center gap-2 mb-4">
+                                <div className="bg-surface-card rounded-2xl p-6 border border-edge">
+                                    <h4 className="text-sm font-medium text-content-secondary flex items-center gap-2 mb-4">
                                         <Bot size={16} className="text-claw-400" />
                                         身份信息
                                     </h4>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="col-span-2 sm:col-span-1">
-                                            <label className="block text-xs text-gray-500 mb-1">名称</label>
+                                            <label className="block text-xs text-content-tertiary mb-1">名称</label>
                                             <input value={form.name} onChange={e => updateForm({ name: e.target.value })}
                                                 className="input-base" />
                                         </div>
                                         <div className="col-span-2 sm:col-span-1">
-                                            <label className="block text-xs text-gray-500 mb-1">Agent ID</label>
+                                            <label className="block text-xs text-content-tertiary mb-1">Agent ID</label>
                                             <input value={form.id} disabled className="input-base opacity-60 cursor-not-allowed" />
                                         </div>
                                         <div className="col-span-2">
-                                            <label className="block text-xs text-gray-500 mb-1">标识 Emoji</label>
+                                            <label className="block text-xs text-content-tertiary mb-1">标识 Emoji</label>
                                             <div className="flex flex-wrap gap-1.5">
                                                 {emojiOptions.map(e => (
                                                     <button key={e} onClick={() => updateForm({ emoji: e })}
                                                         className={clsx('w-8 h-8 rounded-lg text-base flex items-center justify-center transition-all',
-                                                            form.emoji === e ? 'bg-claw-500/30 ring-1 ring-claw-500' : 'bg-dark-600 hover:bg-dark-500')}>
+                                                            form.emoji === e ? 'bg-claw-500/30 ring-1 ring-claw-500' : 'bg-surface-elevated hover:bg-surface-elevated')}>
                                                         {e}
                                                     </button>
                                                 ))}
                                             </div>
                                         </div>
                                         <div className="col-span-2">
-                                            <label className="block text-xs text-gray-500 mb-1">角色描述 (theme)</label>
+                                            <label className="block text-xs text-content-tertiary mb-1">角色描述 (theme)</label>
                                             <textarea value={form.theme || ''} onChange={e => updateForm({ theme: e.target.value || null })}
                                                 placeholder="描述这个虚拟员工的角色、性格和职责..."
                                                 className="input-base resize-none h-16" />
@@ -396,10 +396,10 @@ export function Agents() {
                                     </div>
 
                                     {/* 默认 Agent 标志 */}
-                                    <div className="mt-4 pt-4 border-t border-dark-500 flex items-center justify-between">
+                                    <div className="mt-4 pt-4 border-t border-edge flex items-center justify-between">
                                         <div>
-                                            <p className="text-sm text-gray-300">主 Agent</p>
-                                            <p className="text-xs text-gray-500">设为默认 Agent，处理未绑定的消息</p>
+                                            <p className="text-sm text-content-secondary">主 Agent</p>
+                                            <p className="text-xs text-content-tertiary">设为默认 Agent，处理未绑定的消息</p>
                                         </div>
                                         {form.isDefault ? (
                                             <span className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-yellow-500/20 text-yellow-400 text-xs font-medium">
@@ -415,13 +415,13 @@ export function Agents() {
                                 </div>
 
                                 {/* 模型配置 */}
-                                <div className="bg-dark-700 rounded-2xl p-6 border border-dark-500">
-                                    <h4 className="text-sm font-medium text-gray-300 flex items-center gap-2 mb-4">
+                                <div className="bg-surface-card rounded-2xl p-6 border border-edge">
+                                    <h4 className="text-sm font-medium text-content-secondary flex items-center gap-2 mb-4">
                                         <Bot size={16} className="text-claw-400" />
                                         模型配置
                                     </h4>
                                     <div>
-                                        <label className="block text-xs text-gray-500 mb-1">覆盖模型 (留空使用全局默认)</label>
+                                        <label className="block text-xs text-content-tertiary mb-1">覆盖模型 (留空使用全局默认)</label>
                                         <input value={form.model || ''} onChange={e => updateForm({ model: e.target.value || null })}
                                             placeholder="如: anthropic/claude-sonnet-4-5"
                                             className="input-base" />
@@ -430,12 +430,12 @@ export function Agents() {
                                 </div>
 
                                 {/* 渠道绑定 */}
-                                <div className="bg-dark-700 rounded-2xl p-6 border border-dark-500">
-                                    <h4 className="text-sm font-medium text-gray-300 flex items-center gap-2 mb-4">
+                                <div className="bg-surface-card rounded-2xl p-6 border border-edge">
+                                    <h4 className="text-sm font-medium text-content-secondary flex items-center gap-2 mb-4">
                                         <Link size={16} className="text-claw-400" />
                                         渠道绑定
                                     </h4>
-                                    <p className="text-xs text-gray-500 mb-3">选择此虚拟员工接入的消息渠道。不同员工可接入同一个或不同渠道。</p>
+                                    <p className="text-xs text-content-tertiary mb-3">选择此虚拟员工接入的消息渠道。不同员工可接入同一个或不同渠道。</p>
                                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                                         {channelOptions.map(ch => {
                                             const bound = form.bindings.some(b => b.channel === ch.id);
@@ -446,8 +446,8 @@ export function Agents() {
                                                     className={clsx(
                                                         'flex items-center gap-2 p-3 rounded-xl border transition-all text-sm text-left',
                                                         bound
-                                                            ? 'bg-claw-500/15 border-claw-500/50 text-white'
-                                                            : 'bg-dark-600 border-dark-500 text-gray-400 hover:border-dark-400'
+                                                            ? 'bg-claw-500/15 border-claw-500/50 text-content-primary'
+                                                            : 'bg-surface-elevated border-edge text-content-secondary hover:border-edge'
                                                     )}
                                                 >
                                                     <span className="text-base">{ch.emoji}</span>
@@ -460,14 +460,14 @@ export function Agents() {
                                 </div>
 
                                 {/* 工具权限 */}
-                                <div className="bg-dark-700 rounded-2xl p-6 border border-dark-500">
-                                    <h4 className="text-sm font-medium text-gray-300 flex items-center gap-2 mb-4">
+                                <div className="bg-surface-card rounded-2xl p-6 border border-edge">
+                                    <h4 className="text-sm font-medium text-content-secondary flex items-center gap-2 mb-4">
                                         <Wrench size={16} className="text-claw-400" />
                                         工具权限
                                     </h4>
                                     <div className="space-y-4">
                                         <div>
-                                            <label className="block text-xs text-gray-500 mb-1">工具 Profile</label>
+                                            <label className="block text-xs text-content-tertiary mb-1">工具 Profile</label>
                                             <select value={form.toolsProfile || ''} onChange={e => updateForm({ toolsProfile: e.target.value || null })}
                                                 className="input-base">
                                                 <option value="">默认</option>
@@ -476,14 +476,14 @@ export function Agents() {
                                             </select>
                                         </div>
                                         <div>
-                                            <label className="block text-xs text-gray-500 mb-1">允许的工具 (逗号分隔)</label>
+                                            <label className="block text-xs text-content-tertiary mb-1">允许的工具 (逗号分隔)</label>
                                             <input value={form.toolsAllow.join(', ')}
                                                 onChange={e => updateForm({ toolsAllow: e.target.value.split(',').map(s => s.trim()).filter(Boolean) })}
                                                 placeholder="如: browser, read, write"
                                                 className="input-base" />
                                         </div>
                                         <div>
-                                            <label className="block text-xs text-gray-500 mb-1">禁止的工具 (逗号分隔)</label>
+                                            <label className="block text-xs text-content-tertiary mb-1">禁止的工具 (逗号分隔)</label>
                                             <input value={form.toolsDeny.join(', ')}
                                                 onChange={e => updateForm({ toolsDeny: e.target.value.split(',').map(s => s.trim()).filter(Boolean) })}
                                                 placeholder="如: exec, process, canvas"
@@ -493,44 +493,44 @@ export function Agents() {
                                 </div>
 
                                 {/* 高级设置 */}
-                                <div className="bg-dark-700 rounded-2xl p-6 border border-dark-500">
-                                    <h4 className="text-sm font-medium text-gray-300 flex items-center gap-2 mb-4">
-                                        {form.sandboxMode === 'off' ? <ShieldOff size={16} className="text-gray-400" /> : <Shield size={16} className="text-green-400" />}
+                                <div className="bg-surface-card rounded-2xl p-6 border border-edge">
+                                    <h4 className="text-sm font-medium text-content-secondary flex items-center gap-2 mb-4">
+                                        {form.sandboxMode === 'off' ? <ShieldOff size={16} className="text-content-secondary" /> : <Shield size={16} className="text-green-400" />}
                                         高级设置
                                     </h4>
                                     <div className="space-y-4">
                                         <div>
-                                            <label className="block text-xs text-gray-500 mb-1">沙箱模式</label>
+                                            <label className="block text-xs text-content-tertiary mb-1">沙箱模式</label>
                                             <div className="flex gap-2">
                                                 {sandboxOptions.map(opt => (
                                                     <button key={opt.value} onClick={() => updateForm({ sandboxMode: opt.value })}
                                                         className={clsx(
                                                             'flex-1 p-3 rounded-xl border text-center transition-all',
                                                             form.sandboxMode === opt.value
-                                                                ? 'bg-claw-500/15 border-claw-500/50 text-white'
-                                                                : 'bg-dark-600 border-dark-500 text-gray-400 hover:border-dark-400'
+                                                                ? 'bg-claw-500/15 border-claw-500/50 text-content-primary'
+                                                                : 'bg-surface-elevated border-edge text-content-secondary hover:border-edge'
                                                         )}>
                                                         <p className="text-xs font-medium">{opt.label}</p>
-                                                        <p className="text-[10px] text-gray-500 mt-0.5">{opt.desc}</p>
+                                                        <p className="text-[10px] text-content-tertiary mt-0.5">{opt.desc}</p>
                                                     </button>
                                                 ))}
                                             </div>
                                         </div>
                                         <div>
-                                            <label className="block text-xs text-gray-500 mb-1">工作空间路径</label>
+                                            <label className="block text-xs text-content-tertiary mb-1">工作空间路径</label>
                                             <input value={form.workspace} onChange={e => updateForm({ workspace: e.target.value })}
                                                 className="input-base" />
                                             <p className="text-xs text-gray-600 mt-1">每个虚拟员工拥有独立的工作空间，实现文件和记忆隔离</p>
                                         </div>
                                         <div>
-                                            <label className="block text-xs text-gray-500 mb-1">@提及模式 (逗号分隔)</label>
+                                            <label className="block text-xs text-content-tertiary mb-1">@提及模式 (逗号分隔)</label>
                                             <input value={form.mentionPatterns.join(', ')}
                                                 onChange={e => updateForm({ mentionPatterns: e.target.value.split(',').map(s => s.trim()).filter(Boolean) })}
                                                 placeholder="如: @assistant, assistant"
                                                 className="input-base" />
                                         </div>
                                         <div>
-                                            <label className="block text-xs text-gray-500 mb-1">子代理权限 (逗号分隔, * = 全部)</label>
+                                            <label className="block text-xs text-content-tertiary mb-1">子代理权限 (逗号分隔, * = 全部)</label>
                                             <input value={form.subagentAllow.join(', ')}
                                                 onChange={e => updateForm({ subagentAllow: e.target.value.split(',').map(s => s.trim()).filter(Boolean) })}
                                                 placeholder="* 或指定 agent id"
@@ -573,9 +573,9 @@ export function Agents() {
                                 </AnimatePresence>
                             </motion.div>
                         ) : (
-                            <div className="bg-dark-700 rounded-2xl p-6 border border-dark-500 flex flex-col items-center justify-center h-64">
+                            <div className="bg-surface-card rounded-2xl p-6 border border-edge flex flex-col items-center justify-center h-64">
                                 <Users size={48} className="text-gray-600 mb-4" />
-                                <p className="text-gray-500 text-sm">选择一个虚拟员工查看配置</p>
+                                <p className="text-content-tertiary text-sm">选择一个虚拟员工查看配置</p>
                                 <p className="text-gray-600 text-xs mt-1">或点击"新建虚拟员工"创建新的 Agent</p>
                             </div>
                         )}

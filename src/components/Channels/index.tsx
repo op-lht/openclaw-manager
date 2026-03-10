@@ -577,14 +577,14 @@ export function Channels() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* 渠道列表 */}
           <div className="md:col-span-1 space-y-2">
-            <h3 className="text-sm font-medium text-gray-400 mb-3 px-1">
+            <h3 className="text-sm font-medium text-content-secondary mb-3 px-1">
               消息渠道
             </h3>
             {channels.map((channel) => {
               const info = channelInfo[channel.channel_type] || {
                 name: channel.channel_type,
                 icon: <MessageSquare size={20} />,
-                color: 'text-gray-400',
+                color: 'text-content-secondary',
                 fields: [],
               };
               const isSelected = selectedChannel === channel.id;
@@ -597,14 +597,14 @@ export function Channels() {
                   className={clsx(
                     'w-full flex items-center gap-3 p-4 rounded-xl border transition-all',
                     isSelected
-                      ? 'bg-dark-600 border-claw-500'
-                      : 'bg-dark-700 border-dark-500 hover:border-dark-400'
+                      ? 'bg-surface-elevated border-claw-500'
+                      : 'bg-surface-card border-edge hover:border-edge'
                   )}
                 >
                   <div
                     className={clsx(
                       'w-10 h-10 rounded-lg flex items-center justify-center',
-                      isConfigured ? 'bg-dark-500' : 'bg-dark-600'
+                      isConfigured ? 'bg-surface-elevated' : 'bg-surface-elevated'
                     )}
                   >
                     <span className={info.color}>{info.icon}</span>
@@ -613,7 +613,7 @@ export function Channels() {
                     <p
                       className={clsx(
                         'text-sm font-medium',
-                        isSelected ? 'text-white' : 'text-gray-300'
+                        isSelected ? 'text-content-primary' : 'text-content-secondary'
                       )}
                     >
                       {info.name}
@@ -626,8 +626,8 @@ export function Channels() {
                         </>
                       ) : (
                         <>
-                          <X size={12} className="text-gray-500" />
-                          <span className="text-xs text-gray-500">未配置</span>
+                          <X size={12} className="text-content-tertiary" />
+                          <span className="text-xs text-content-tertiary">未配置</span>
                         </>
                       )}
                     </div>
@@ -648,18 +648,18 @@ export function Channels() {
                 key={selectedChannel}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="bg-dark-700 rounded-2xl p-6 border border-dark-500"
+                className="bg-surface-card rounded-2xl p-6 border border-edge"
               >
                 <div className="flex items-center gap-3 mb-4">
-                  <div className={clsx('w-10 h-10 rounded-lg flex items-center justify-center bg-dark-500', currentInfo.color)}>
+                  <div className={clsx('w-10 h-10 rounded-lg flex items-center justify-center bg-surface-elevated', currentInfo.color)}>
                     {currentInfo.icon}
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-white">
+                    <h3 className="text-lg font-semibold text-content-primary">
                       配置 {currentInfo.name}
                     </h3>
                     {currentInfo.helpText && (
-                      <p className="text-xs text-gray-500">{currentInfo.helpText}</p>
+                      <p className="text-xs text-content-tertiary">{currentInfo.helpText}</p>
                     )}
                   </div>
                 </div>
@@ -668,16 +668,16 @@ export function Channels() {
                 {currentChannel.channel_type === 'feishu' && (
                   <div className="mb-4">
                     {feishuPluginLoading ? (
-                      <div className="p-4 bg-dark-600 rounded-xl border border-dark-500 flex items-center gap-3">
-                        <Loader2 size={20} className="animate-spin text-gray-400" />
-                        <span className="text-gray-400">正在检查飞书插件状态...</span>
+                      <div className="p-4 bg-surface-elevated rounded-xl border border-edge flex items-center gap-3">
+                        <Loader2 size={20} className="animate-spin text-content-secondary" />
+                        <span className="text-content-secondary">正在检查飞书插件状态...</span>
                       </div>
                     ) : feishuPluginStatus?.installed ? (
                       <div className="p-4 bg-green-500/10 rounded-xl border border-green-500/30 flex items-center gap-3">
                         <Package size={20} className="text-green-400" />
                         <div className="flex-1">
                           <p className="text-green-400 font-medium">飞书插件已安装</p>
-                          <p className="text-xs text-gray-400 mt-0.5">
+                          <p className="text-xs text-content-secondary mt-0.5">
                             {feishuPluginStatus.plugin_name || '@m1heng-clawd/feishu'}
                             {feishuPluginStatus.version && ` v${feishuPluginStatus.version}`}
                           </p>
@@ -690,7 +690,7 @@ export function Channels() {
                           <AlertTriangle size={20} className="text-amber-400 mt-0.5" />
                           <div className="flex-1">
                             <p className="text-amber-400 font-medium">需要安装飞书插件</p>
-                            <p className="text-xs text-gray-400 mt-1">
+                            <p className="text-xs text-content-secondary mt-1">
                               飞书渠道需要先安装 @m1heng-clawd/feishu 插件才能使用。
                             </p>
                             <div className="mt-3 flex flex-wrap gap-2">
@@ -714,8 +714,8 @@ export function Channels() {
                                 刷新状态
                               </button>
                             </div>
-                            <p className="text-xs text-gray-500 mt-2">
-                              或手动执行: <code className="px-1.5 py-0.5 bg-dark-600 rounded text-gray-400">openclaw plugins install @m1heng-clawd/feishu</code>
+                            <p className="text-xs text-content-tertiary mt-2">
+                              或手动执行: <code className="px-1.5 py-0.5 bg-surface-elevated rounded text-content-secondary">openclaw plugins install @m1heng-clawd/feishu</code>
                             </p>
                           </div>
                         </div>
@@ -728,16 +728,16 @@ export function Channels() {
                 {currentChannel.channel_type === 'qqbot' && (
                   <div className="mb-4">
                     {qqbotPluginLoading ? (
-                      <div className="p-4 bg-dark-600 rounded-xl border border-dark-500 flex items-center gap-3">
-                        <Loader2 size={20} className="animate-spin text-gray-400" />
-                        <span className="text-gray-400">正在检查 QQ Bot 插件状态...</span>
+                      <div className="p-4 bg-surface-elevated rounded-xl border border-edge flex items-center gap-3">
+                        <Loader2 size={20} className="animate-spin text-content-secondary" />
+                        <span className="text-content-secondary">正在检查 QQ Bot 插件状态...</span>
                       </div>
                     ) : qqbotPluginStatus?.installed ? (
                       <div className="p-4 bg-green-500/10 rounded-xl border border-green-500/30 flex items-center gap-3">
                         <Package size={20} className="text-green-400" />
                         <div className="flex-1">
                           <p className="text-green-400 font-medium">QQ Bot 插件已安装</p>
-                          <p className="text-xs text-gray-400 mt-0.5">
+                          <p className="text-xs text-content-secondary mt-0.5">
                             {qqbotPluginStatus.plugin_name || '@sliverp/qqbot'}
                             {qqbotPluginStatus.version && ` v${qqbotPluginStatus.version}`}
                           </p>
@@ -750,7 +750,7 @@ export function Channels() {
                           <AlertTriangle size={20} className="text-amber-400 mt-0.5" />
                           <div className="flex-1">
                             <p className="text-amber-400 font-medium">需要安装 QQ Bot 插件</p>
-                            <p className="text-xs text-gray-400 mt-1">
+                            <p className="text-xs text-content-secondary mt-1">
                               QQ 渠道需要先安装 @sliverp/qqbot 插件才能使用。
                             </p>
                             <div className="mt-3 flex flex-wrap gap-2">
@@ -774,8 +774,8 @@ export function Channels() {
                                 刷新状态
                               </button>
                             </div>
-                            <p className="text-xs text-gray-500 mt-2">
-                              或手动执行: <code className="px-1.5 py-0.5 bg-dark-600 rounded text-gray-400">openclaw plugins install @sliverp/qqbot@latest</code>
+                            <p className="text-xs text-content-tertiary mt-2">
+                              或手动执行: <code className="px-1.5 py-0.5 bg-surface-elevated rounded text-content-secondary">openclaw plugins install @sliverp/qqbot@latest</code>
                             </p>
                           </div>
                         </div>
@@ -787,7 +787,7 @@ export function Channels() {
                 <div className="space-y-4">
                   {currentInfo.fields.map((field) => (
                     <div key={field.key}>
-                      <label className="block text-sm text-gray-400 mb-2">
+                      <label className="block text-sm text-content-secondary mb-2">
                         {field.label}
                         {field.required && <span className="text-red-400 ml-1">*</span>}
                         {configForm[field.key] && (
@@ -824,7 +824,7 @@ export function Channels() {
                           <button
                             type="button"
                             onClick={() => togglePasswordVisibility(field.key)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-content-tertiary hover:text-content-primary transition-colors"
                             title={visiblePasswords.has(field.key) ? '隐藏' : '显示'}
                           >
                             {visiblePasswords.has(field.key) ? (
@@ -854,8 +854,8 @@ export function Channels() {
                       <div className="flex items-center gap-3 mb-3">
                         <QrCode size={24} className="text-green-400" />
                         <div>
-                          <p className="text-white font-medium">扫码登录</p>
-                          <p className="text-xs text-gray-400">WhatsApp 需要扫描二维码登录</p>
+                          <p className="text-content-primary font-medium">扫码登录</p>
+                          <p className="text-xs text-content-secondary">WhatsApp 需要扫描二维码登录</p>
                         </div>
                       </div>
                       <div className="flex gap-2">
@@ -887,14 +887,14 @@ export function Channels() {
                           )}
                         </button>
                       </div>
-                      <p className="text-xs text-gray-500 mt-2 text-center">
+                      <p className="text-xs text-content-tertiary mt-2 text-center">
                         登录成功后点击右侧按钮刷新状态，或运行: openclaw channels login --channel whatsapp
                       </p>
                     </div>
                   )}
 
                   {/* 操作按钮 - 2×2 网格布局 */}
-                  <div className="pt-4 border-t border-dark-500">
+                  <div className="pt-4 border-t border-edge">
                     <div className="grid grid-cols-2 gap-3">
                       <button
                         onClick={handleSave}
@@ -942,13 +942,13 @@ export function Channels() {
                           <span className="text-sm text-red-300">确定清空？</span>
                           <button
                             onClick={handleClearConfig}
-                            className="px-2 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+                            className="px-2 py-1 text-xs bg-red-500 text-content-primary rounded hover:bg-red-600 transition-colors"
                           >
                             确定
                           </button>
                           <button
                             onClick={() => setShowClearConfirm(false)}
-                            className="px-2 py-1 text-xs bg-dark-600 text-gray-300 rounded hover:bg-dark-500 transition-colors"
+                            className="px-2 py-1 text-xs bg-surface-elevated text-content-secondary rounded hover:bg-surface-elevated transition-colors"
                           >
                             取消
                           </button>
@@ -998,7 +998,7 @@ export function Channels() {
                         )}>
                           {testResult.success ? '测试成功' : '测试失败'}
                         </p>
-                        <p className="text-sm text-gray-400 mt-1">{testResult.message}</p>
+                        <p className="text-sm text-content-secondary mt-1">{testResult.message}</p>
                         {testResult.error && (
                           <p className="text-xs text-red-300 mt-2 whitespace-pre-wrap">
                             {testResult.error}
@@ -1010,7 +1010,7 @@ export function Channels() {
                 </div>
               </motion.div>
             ) : (
-              <div className="h-full flex items-center justify-center text-gray-500">
+              <div className="h-full flex items-center justify-center text-content-tertiary">
                 <p>选择左侧渠道进行配置</p>
               </div>
             )}
