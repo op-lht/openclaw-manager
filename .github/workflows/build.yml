@@ -21,6 +21,12 @@ concurrency:
 env:
   CARGO_TERM_COLOR: always
 
+# 显式授予 token 权限（fork 仓库若默认只读会导致无法创建 Release / 发 Package）
+permissions:
+  contents: write
+  packages: write
+  actions: read
+
 jobs:
   build:
     strategy:
