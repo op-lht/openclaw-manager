@@ -164,7 +164,7 @@ jobs:
           tag_name: ${{ github.event.inputs.release_tag || github.ref_name }}
           target_commitish: ${{ github.sha }}
           draft: false
-          prerelease: true
+          prerelease: false
           generate_release_notes: true
           files: |
             artifacts/**/*.dmg
@@ -175,3 +175,29 @@ jobs:
             artifacts/**/*.AppImage
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ── GitHub Packages（npm，与 Release 版本对齐；可安装包仍以 Release 安装包为准）──
+  publish-gpr:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: release
+    runs-on: ubuntu-latest
+    name: Publish to GitHub Packages
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com
+          scope: '@op-lht'
+
+      - name: Publish npm package to GitHub Packages
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
