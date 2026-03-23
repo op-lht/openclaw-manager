@@ -2,6 +2,30 @@ use crate::utils::{platform, shell};
 use serde::{Deserialize, Serialize};
 use tauri::command;
 use log::{info, warn, error, debug};
+use regex::Regex;
+use semver::Version;
+use std::sync::LazyLock;
+
+/// 从 CLI / npm 输出中提取并解析为 semver（支持多行、前缀文案）
+static SEMVER_IN_TEXT: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"(?i)\bv?(?P<ver>\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?)\b")
+        .expect("semver extract regex")
+});
+
+fn parse_version_from_text(text: &str) -> Option<Version> {
+    let line = text.lines().next()?.trim();
+    if line.is_empty() {
+        return None;
+    }
+    let stripped = line.trim_start_matches('v');
+    if let Ok(v) = Version::parse(stripped) {
+        return Some(v);
+    }
+    SEMVER_IN_TEXT
+        .captures(line)
+        .and_then(|c| c.name("ver"))
+        .and_then(|m| Version::parse(m.as_str()).ok())
+}
 
 /// 环境检查结果
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -278,12 +302,10 @@ fn get_windows_node_paths() -> Vec<String> {
     paths
 }
 
-/// 获取 OpenClaw 版本
+/// 获取 OpenClaw 版本（规范化后的 semver 字符串，供展示与比较）
 fn get_openclaw_version() -> Option<String> {
-    // 使用 run_openclaw 统一处理各平台
-    shell::run_openclaw(&["--version"])
-        .ok()
-        .map(|v| v.trim().to_string())
+    let raw = shell::run_openclaw(&["--version"]).ok()?;
+    parse_version_from_text(&raw).map(|v| v.to_string())
 }
 
 /// 检查 Node.js 版本是否 >= 22
@@ -1012,12 +1034,12 @@ pub async fn check_openclaw_update() -> Result<UpdateInfo, String> {
     info!("[版本检查] 当前版本: {:?}", current_version);
     
     if current_version.is_none() {
-        info!("[版本检查] OpenClaw 未安装");
+        info!("[版本检查] OpenClaw 未安装或无法解析版本输出");
         return Ok(UpdateInfo {
             update_available: false,
             current_version: None,
             latest_version: None,
-            error: Some("OpenClaw 未安装".to_string()),
+            error: Some("OpenClaw 未安装或无法解析当前版本".to_string()),
         });
     }
     
@@ -1030,15 +1052,36 @@ pub async fn check_openclaw_update() -> Result<UpdateInfo, String> {
             update_available: false,
             current_version,
             latest_version: None,
-            error: Some("无法获取最新版本信息".to_string()),
+            error: Some("无法获取或解析 registry 上的最新版本".to_string()),
         });
     }
-    
-    // 比较版本
+
     let current = current_version.clone().unwrap();
     let latest = latest_version.clone().unwrap();
-    let update_available = compare_versions(&current, &latest);
-    
+    let current_v = match Version::parse(&current) {
+        Ok(v) => v,
+        Err(_) => {
+            return Ok(UpdateInfo {
+                update_available: false,
+                current_version: Some(current),
+                latest_version: Some(latest),
+                error: Some("无法解析当前版本号".to_string()),
+            });
+        }
+    };
+    let latest_v = match Version::parse(&latest) {
+        Ok(v) => v,
+        Err(_) => {
+            return Ok(UpdateInfo {
+                update_available: false,
+                current_version: Some(current),
+                latest_version: Some(latest),
+                error: Some("无法解析 registry 版本号".to_string()),
+            });
+        }
+    };
+    let update_available = latest_v > current_v;
+
     info!("[版本检查] 是否有更新: {}", update_available);
     
     Ok(UpdateInfo {
@@ -1060,11 +1103,11 @@ fn get_latest_openclaw_version() -> Option<String> {
     
     match result {
         Ok(version) => {
-            let v = version.trim().to_string();
+            let v = version.trim();
             if v.is_empty() {
                 None
             } else {
-                Some(v)
+                parse_version_from_text(v).map(|ver| ver.to_string())
             }
         }
         Err(e) => {
@@ -1072,38 +1115,6 @@ fn get_latest_openclaw_version() -> Option<String> {
             None
         }
     }
-}
-
-/// 比较版本号，返回是否有更新可用
-/// current: 当前版本 (如 "1.0.0" 或 "v1.0.0")
-/// latest: 最新版本 (如 "1.0.1")
-fn compare_versions(current: &str, latest: &str) -> bool {
-    // 移除可能的 'v' 前缀和空白
-    let current = current.trim().trim_start_matches('v');
-    let latest = latest.trim().trim_start_matches('v');
-    
-    // 分割版本号
-    let current_parts: Vec<u32> = current
-        .split('.')
-        .filter_map(|s| s.parse().ok())
-        .collect();
-    let latest_parts: Vec<u32> = latest
-        .split('.')
-        .filter_map(|s| s.parse().ok())
-        .collect();
-    
-    // 比较每个部分
-    for i in 0..3 {
-        let c = current_parts.get(i).unwrap_or(&0);
-        let l = latest_parts.get(i).unwrap_or(&0);
-        if l > c {
-            return true;
-        } else if l < c {
-            return false;
-        }
-    }
-    
-    false
 }
 
 /// 更新 OpenClaw

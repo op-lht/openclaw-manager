@@ -3,6 +3,7 @@ use crate::utils::shell;
 use tauri::command;
 use std::process::Command;
 use log::{info, debug};
+use sysinfo::{Pid, ProcessesToUpdate, System};
 
 #[cfg(windows)]
 use std::os::windows::process::CommandExt;
@@ -57,19 +58,37 @@ fn check_port_listening(port: u16) -> Option<u32> {
     }
 }
 
+/// 根据 PID 查询 RSS 内存（MB）与已运行时长（秒）
+fn process_memory_and_uptime(pid: u32) -> (Option<f64>, Option<u64>) {
+    let pid_sys = Pid::from_u32(pid);
+    let mut sys = System::new();
+    sys.refresh_processes(ProcessesToUpdate::Some(&[pid_sys]), true);
+    let Some(proc) = sys.process(pid_sys) else {
+        return (None, None);
+    };
+    let mem_bytes = proc.memory();
+    let memory_mb = Some(mem_bytes as f64 / (1024.0 * 1024.0));
+    let uptime_seconds = Some(proc.run_time());
+    (memory_mb, uptime_seconds)
+}
+
 /// 获取服务状态（简单版：直接检查端口占用）
 #[command]
 pub async fn get_service_status() -> Result<ServiceStatus, String> {
     // 简单直接：检查端口是否被占用
     let pid = check_port_listening(SERVICE_PORT);
     let running = pid.is_some();
-    
+
+    let (memory_mb, uptime_seconds) = pid
+        .map(process_memory_and_uptime)
+        .unwrap_or((None, None));
+
     Ok(ServiceStatus {
         running,
         pid,
         port: SERVICE_PORT,
-        uptime_seconds: None,
-        memory_mb: None,
+        uptime_seconds,
+        memory_mb,
         cpu_percent: None,
     })
 }

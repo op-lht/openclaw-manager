@@ -1,4 +1,4 @@
-import { Play, Square, RotateCcw, Stethoscope } from 'lucide-react';
+import { Play, Square, RotateCcw, Stethoscope, CheckCircle, XCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 
@@ -8,32 +8,58 @@ interface ServiceStatus {
   port: number;
 }
 
+export interface QuickActionFeedback {
+  type: 'success' | 'error';
+  message: string;
+}
+
 interface QuickActionsProps {
   status: ServiceStatus | null;
   loading: boolean;
+  diagnoseLoading?: boolean;
+  feedback?: QuickActionFeedback | null;
   onStart: () => void;
   onStop: () => void;
   onRestart: () => void;
+  onDiagnose: () => void;
 }
 
 export function QuickActions({
   status,
   loading,
+  diagnoseLoading = false,
+  feedback,
   onStart,
   onStop,
   onRestart,
+  onDiagnose,
 }: QuickActionsProps) {
   const { t } = useTranslation();
   const isRunning = status?.running || false;
+  const busy = loading || diagnoseLoading;
 
   return (
     <div className="bg-surface-card rounded-2xl p-6 border border-edge">
       <h3 className="text-lg font-semibold text-content-primary mb-4">快捷操作</h3>
 
+      {feedback ? (
+        <div
+          className={clsx(
+            'mb-4 p-3 rounded-lg border flex items-center gap-2',
+            feedback.type === 'success'
+              ? 'bg-green-500/10 border-green-500/30 text-green-400'
+              : 'bg-red-500/10 border-red-500/30 text-red-400'
+          )}
+        >
+          {feedback.type === 'success' ? <CheckCircle size={16} /> : <XCircle size={16} />}
+          <span className="text-sm">{feedback.message}</span>
+        </div>
+      ) : null}
+
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <button
           onClick={onStart}
-          disabled={loading || isRunning}
+          disabled={busy || isRunning}
           className={clsx(
             'flex flex-col items-center gap-3 p-4 rounded-xl transition-all',
             'border border-edge',
@@ -65,7 +91,7 @@ export function QuickActions({
 
         <button
           onClick={onStop}
-          disabled={loading || !isRunning}
+          disabled={busy || !isRunning}
           className={clsx(
             'flex flex-col items-center gap-3 p-4 rounded-xl transition-all',
             'border border-edge',
@@ -97,7 +123,7 @@ export function QuickActions({
 
         <button
           onClick={onRestart}
-          disabled={loading}
+          disabled={busy}
           className={clsx(
             'flex flex-col items-center gap-3 p-4 rounded-xl transition-all',
             'border border-edge',
@@ -114,7 +140,9 @@ export function QuickActions({
         </button>
 
         <button
-          disabled={loading}
+          type="button"
+          onClick={onDiagnose}
+          disabled={busy}
           className={clsx(
             'flex flex-col items-center gap-3 p-4 rounded-xl transition-all',
             'border border-edge',
@@ -122,7 +150,10 @@ export function QuickActions({
           )}
         >
           <div className="w-12 h-12 rounded-full flex items-center justify-center bg-purple-500/20">
-            <Stethoscope size={20} className="text-purple-400" />
+            <Stethoscope
+              size={20}
+              className={clsx('text-purple-400', diagnoseLoading && 'animate-spin')}
+            />
           </div>
           <span className="text-sm font-medium text-content-secondary">诊断</span>
         </button>

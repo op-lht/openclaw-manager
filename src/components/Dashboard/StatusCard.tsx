@@ -20,7 +20,7 @@ export function StatusCard({ status, loading }: StatusCardProps) {
   const { t } = useTranslation();
 
   const formatUptime = (seconds: number | null) => {
-    if (!seconds) return '--';
+    if (seconds == null) return '--';
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     if (hours > 0) return `${hours}h ${minutes}m`;
@@ -80,7 +80,7 @@ export function StatusCard({ status, loading }: StatusCardProps) {
             <span className="text-xs text-content-secondary">内存</span>
           </div>
           <p className="text-xl font-semibold text-content-primary">
-            {status?.memory_mb ? `${status.memory_mb.toFixed(1)} MB` : '--'}
+            {status?.memory_mb != null ? `${status.memory_mb.toFixed(1)} MB` : '--'}
           </p>
         </div>
 
@@ -90,7 +90,7 @@ export function StatusCard({ status, loading }: StatusCardProps) {
             <span className="text-xs text-content-secondary">运行时间</span>
           </div>
           <p className="text-xl font-semibold text-content-primary">
-            {formatUptime(status?.uptime_seconds || null)}
+            {formatUptime(status?.uptime_seconds ?? null)}
           </p>
         </div>
       </div>

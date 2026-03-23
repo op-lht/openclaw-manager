@@ -1,9 +1,9 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { invoke } from '@tauri-apps/api/core';
 import { useTranslation } from 'react-i18next';
 import { StatusCard } from './StatusCard';
-import { QuickActions } from './QuickActions';
+import { QuickActions, type QuickActionFeedback } from './QuickActions';
 import { SystemInfo } from './SystemInfo';
 import { Setup } from '../Setup';
 import { api, ServiceStatus, isTauri } from '../../lib/tauri';
@@ -21,6 +21,8 @@ export function Dashboard({ envStatus, onSetupComplete }: DashboardProps) {
   const [status, setStatus] = useState<ServiceStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
+  const [diagnoseLoading, setDiagnoseLoading] = useState(false);
+  const [actionFeedback, setActionFeedback] = useState<QuickActionFeedback | null>(null);
   const [logs, setLogs] = useState<string[]>([]);
   const [logsExpanded, setLogsExpanded] = useState(true);
   const [autoRefreshLogs, setAutoRefreshLogs] = useState(true);
@@ -72,15 +74,28 @@ export function Dashboard({ envStatus, onSetupComplete }: DashboardProps) {
     }
   }, [logs, logsExpanded]);
 
+  const showActionFeedback = useCallback((type: QuickActionFeedback['type'], message: string) => {
+    setActionFeedback({ type, message });
+  }, []);
+
+  useEffect(() => {
+    if (!actionFeedback) return;
+    const timer = window.setTimeout(() => setActionFeedback(null), 5000);
+    return () => window.clearTimeout(timer);
+  }, [actionFeedback]);
+
+  const formatInvokeError = (e: unknown) => (e instanceof Error ? e.message : String(e));
+
   const handleStart = async () => {
     if (!isTauri()) return;
     setActionLoading(true);
     try {
-      await api.startService();
+      const msg = await api.startService();
       await fetchStatus();
       await fetchLogs();
+      showActionFeedback('success', msg);
     } catch (e) {
-      console.error('启动失败:', e);
+      showActionFeedback('error', formatInvokeError(e));
     } finally {
       setActionLoading(false);
     }
@@ -90,11 +105,12 @@ export function Dashboard({ envStatus, onSetupComplete }: DashboardProps) {
     if (!isTauri()) return;
     setActionLoading(true);
     try {
-      await api.stopService();
+      const msg = await api.stopService();
       await fetchStatus();
       await fetchLogs();
+      showActionFeedback('success', msg);
     } catch (e) {
-      console.error('停止失败:', e);
+      showActionFeedback('error', formatInvokeError(e));
     } finally {
       setActionLoading(false);
     }
@@ -104,13 +120,31 @@ export function Dashboard({ envStatus, onSetupComplete }: DashboardProps) {
     if (!isTauri()) return;
     setActionLoading(true);
     try {
-      await api.restartService();
+      const msg = await api.restartService();
       await fetchStatus();
       await fetchLogs();
+      showActionFeedback('success', msg);
     } catch (e) {
-      console.error('重启失败:', e);
+      showActionFeedback('error', formatInvokeError(e));
     } finally {
       setActionLoading(false);
+    }
+  };
+
+  const handleDiagnose = async () => {
+    if (!isTauri()) return;
+    setDiagnoseLoading(true);
+    try {
+      const results = await api.runDoctor();
+      const passed = results.filter((r) => r.passed).length;
+      showActionFeedback(
+        'success',
+        `诊断完成：${passed}/${results.length} 项通过`
+      );
+    } catch (e) {
+      showActionFeedback('error', formatInvokeError(e));
+    } finally {
+      setDiagnoseLoading(false);
     }
   };
 
@@ -166,9 +200,12 @@ export function Dashboard({ envStatus, onSetupComplete }: DashboardProps) {
           <QuickActions
             status={status}
             loading={actionLoading}
+            diagnoseLoading={diagnoseLoading}
+            feedback={actionFeedback}
             onStart={handleStart}
             onStop={handleStop}
             onRestart={handleRestart}
+            onDiagnose={handleDiagnose}
           />
         </motion.div>
 
